@@ -50,6 +50,12 @@ directory ::File.dirname(node['openstack']['block-storage']['api']['auth']['cach
 end
 
 service 'cinder-api' do
+  case node["platform"]
+  when "ubuntu"
+    if node["platform_version"].to_f >= 14.04
+      provider Chef::Provider::Service::Upstart
+    end
+  end
   service_name platform_options['cinder_api_service']
   supports status: true, restart: true
   action :enable
