@@ -190,7 +190,7 @@ when 'cinder.volume.drivers.lvm.LVMISCSIDriver'
       end
 
       service 'cinder-group-active' do
-  case node["platform"]
+        case node["platform"]
         when "ubuntu"
           if node["platform_version"].to_f >= 14.04
             provider Chef::Provider::Service::Upstart

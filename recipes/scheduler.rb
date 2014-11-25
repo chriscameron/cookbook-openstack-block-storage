@@ -41,6 +41,12 @@ node['openstack']['db']['python_packages'][db_type].each do |pkg|
 end
 
 service 'cinder-scheduler' do
+  case node["platform"]
+  when "ubuntu"
+    if node["platform_version"].to_f >= 14.04
+      provider Chef::Provider::Service::Upstart
+    end
+  end
   service_name platform_options['cinder_scheduler_service']
   supports status: true, restart: true
   action [:enable, :start]
