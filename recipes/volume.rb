@@ -190,6 +190,12 @@ when 'cinder.volume.drivers.lvm.LVMISCSIDriver'
       end
 
       service 'cinder-group-active' do
+  case node["platform"]
+        when "ubuntu"
+          if node["platform_version"].to_f >= 14.04
+            provider Chef::Provider::Service::Upstart
+          end
+        end
         service_name 'cinder-group-active'
 
         action [:enable, :start]
@@ -227,6 +233,12 @@ when 'cinder.volume.drivers.emc.emc_smis_iscsi.EMCSMISISCSIDriver'
 end
 
 service 'cinder-volume' do
+  case node["platform"]
+  when "ubuntu"
+    if node["platform_version"].to_f >= 14.04
+      provider Chef::Provider::Service::Upstart
+    end
+  end
   service_name platform_options['cinder_volume_service']
   supports status: true, restart: true
   action [:enable, :start]
