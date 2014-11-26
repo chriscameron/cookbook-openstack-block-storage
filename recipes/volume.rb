@@ -246,6 +246,12 @@ service 'cinder-volume' do
 end
 
 service 'iscsitarget' do
+  case node["platform"]
+  when "ubuntu"
+    if node["platform_version"].to_f >= 14.04
+      provider Chef::Provider::Service::Upstart
+    end
+  end
   service_name platform_options['cinder_iscsitarget_service']
   supports status: true, restart: true
   action :enable
